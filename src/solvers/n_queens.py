@@ -11,3 +11,23 @@ def is_safe(board, row, col):
         if prev_col == col: return False
         if abs(row - prev_row) == abs(col - prev_col): return False
     return True
+
+def solve_n_queens(n):
+    if n == 0: return []
+
+    solutions = []
+    board = []
+
+    def backtrack(row):
+        if row == n:
+            solutions.append(board.copy())
+            return
+        
+        for col in range(n):
+            if is_safe(board, row, col):
+                board.append(col)
+                backtrack(row+1)
+                board.pop()
+
+    backtrack(0)
+    return solutions
