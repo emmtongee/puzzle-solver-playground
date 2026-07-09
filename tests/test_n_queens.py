@@ -1,4 +1,4 @@
-from src.solvers.n_queens import *
+from src.solvers.n_queens import is_safe, solve_n_queens
 
 
 def test_same_column_is_unsafe():
@@ -24,15 +24,15 @@ def test_n_queens_solution_length():
     for solution in solve_n_queens(4):
         assert len(solution) == 4
 
-def solution_is_valid(solution):
+def _solution_is_valid(solution):
     if len(solution) <= 1: 
         return True
     sol = solution.copy()
     col = sol.pop()
-    if not solution_is_valid(sol): 
+    if not _solution_is_valid(sol): 
         return False
     return is_safe(sol, len(sol), col)
 
 def test_n_queens_solution_validity():
     for solution in solve_n_queens(4):
-        assert solution_is_valid(solution)
+        assert _solution_is_valid(solution)
