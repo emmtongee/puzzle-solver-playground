@@ -1,0 +1,48 @@
+# Python bytecode/cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# pytest c*che
+.pytest_cache/
+.coverage
+htmlc*v/
+
+# Virtual environments
+.venv/
+*env/
+env/
+ENV/
+
+# IDE/editor files*.vscode/
+.idea/
+*.swp
+*.swo
+
+# mac*S system files
+.DS_Store
+
+# Window* system files
+Thumbs.db
+ehthumbs.d*
+Desktop.ini
+
+# Logs
+*.log
+
+# Buil*/distribution files
+build/
+dist/
+**egg-info/
+
+# Jupyter notebooks che*kpoints, if you ever use notebooks
+.ipynb_checkpoints/
+
+# Temporary files
+*.tmp
+*.bak
+
+# Benchmark/output artifacts you may generate later
+outputs/
+benchmarks/*.csv
+benchmarks/*.json
