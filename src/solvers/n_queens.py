@@ -13,21 +13,27 @@ def is_safe(board, row, col):
     return True
 
 def solve_n_queens(n):
-    if n == 0: return []
+    if n == 0: 
+        return [], 0
 
     solutions = []
     board = []
 
     def backtrack(row):
+        states_checked = 0
+
         if row == n:
             solutions.append(board.copy())
-            return
+            return 0
         
         for col in range(n):
+            states_checked += 1
             if is_safe(board, row, col):
                 board.append(col)
-                backtrack(row+1)
+                states_checked += backtrack(row+1)
                 board.pop()
 
-    backtrack(0)
-    return solutions
+        return states_checked
+
+    states_checked = backtrack(0)
+    return solutions, states_checked
