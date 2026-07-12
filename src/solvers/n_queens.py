@@ -10,7 +10,7 @@ Q . . .
 . Q . .
 '''
 
-def is_safe(board, row, col):
+def n_queens_is_safe(board, row, col):
 
     """
     Return True if a queen can be placed at (row, col)
@@ -41,7 +41,7 @@ def solve_n_queens(n):
         
         for col in range(n):
             states_checked += 1
-            if is_safe(board, row, col):
+            if n_queens_is_safe(board, row, col):
                 board.append(col)
                 states_checked += backtrack(row+1)
                 board.pop()
