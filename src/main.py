@@ -1,7 +1,6 @@
 from time import perf_counter
 
 from src.solvers.n_queens import solve_n_queens
-from src.utils.display import format_n_queens_board
 
 def main():
     n = 8
