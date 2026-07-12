@@ -13,6 +13,8 @@ def is_safe(board, row, col):
     return True
 
 def solve_n_queens(n):
+    if n < 0:
+        raise ValueError("solve_n_queens() does not accept negative integers")
     if n == 0: 
         return [], 0
 

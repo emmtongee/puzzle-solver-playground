@@ -1,3 +1,5 @@
+import pytest
+
 from src.solvers.n_queens import is_safe, solve_n_queens
 from src.utils.display import format_n_queens_board
 
@@ -37,6 +39,10 @@ def _solution_is_valid(solution):
 def test_n_queens_solution_validity():
     for solution in solve_n_queens(4)[0]:
         assert _solution_is_valid(solution)
+
+def test_negative_n_raises_value_error():
+    with pytest.raises(ValueError):
+        solve_n_queens(-1)
 
 def test_states_checked_is_int():
     for i in range(5):
