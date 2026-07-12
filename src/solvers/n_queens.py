@@ -1,4 +1,15 @@
-# board: [2, 4] -> queens at row 0 col 2, row 1 col 4
+'''
+N-Queens board representation:
+For n*n board, a list of n integers such that the i th integer represents the column position of the queen on the i-th row.
+Indexes are zero-based.
+
+e.g. [2,0,3,1] means there are 4 queens at (0,2), (1,0), (2,3), (3,1), or:
+. . Q .
+Q . . .
+. . . Q
+. Q . .
+'''
+
 def is_safe(board, row, col):
 
     """
