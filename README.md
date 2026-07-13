@@ -14,6 +14,10 @@ Given an $n \times n$ chessboard, place $n$ queens such that no two queens share
 
 Backtracking: Place one queen in each row. For every row, try each column and continue recursively whenever the placement does not conflict with an existing queen. If no valid placement remains, backtrack to the previous row.
 
+### Sudoku
+
+On a $9 \times 9$ board divided into 9 $3 \times 3$ boxes, some integers from 1 to 9 are filled in some cells. Fill in the rest of the cells with integers from 1 to 9 such that no two same numbers share the same row, column or box.
+
 ## Structure
 
 ```text
@@ -24,12 +28,17 @@ puzzle-solver-playground/
 │   ├── main.py
 │   ├── solvers/
 │   │   ├── __init__.py
-│   │   └── n_queens.py
+│   │   ├── n_queens.py
+│   │   └── sudoku.py
 │   └── utils/
 │       ├── __init__.py
 │       └── display.py
-└── tests/
-    └── test_n_queens.py
+├── tests/
+│   ├── test_n_queens.py
+│   └── test_sudoku.py
+└── examples/
+    ├── sudoku_easy.txt
+    └── sudoku_invalid.txt
 ```
 
 ## How to use
