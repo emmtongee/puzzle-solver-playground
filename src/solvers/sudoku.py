@@ -40,8 +40,7 @@ def parse_sudoku(board_str):
     return output_list
 
 
-# whether the board is valid if the cell number in (row, col) is replaced with num
-# ignores the original number in the cell
+# Checks whether a value can occupy a coordinate while ignoring only the value currently at that coordinate
 def sudoku_is_safe(board, row, col, num):
 
     # num not from 1-9
@@ -49,8 +48,9 @@ def sudoku_is_safe(board, row, col, num):
         raise ValueError("num not from 1 to 9")
 
     # row conflict
-    if num in board[row] and board[row][col] != num:
-        return False
+    for i in range(9):
+        if board[row][i] == num and i != col:
+            return False
     
     # column conflict
     for current_row in range(9):
