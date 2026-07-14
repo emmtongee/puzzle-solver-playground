@@ -67,3 +67,47 @@ def sudoku_is_safe(board, row, col, num):
                 return False
     
     return True
+
+
+# Checks whether all existing non-zero cells are mutually consistent
+def sudoku_board_is_valid(board):
+    for row in range(9):
+        for col in range(9):
+            if board[row][col] != 0 and not sudoku_is_safe(board, row, col, board[row][col]):
+                return False
+    return True
+
+
+def solve_sudoku(board):
+    '''
+    Validates the initial clues
+    Raises ValueError if clues contradict each other
+    Solves a copy
+    Returns the solved copy
+    Returns None if no solution exists
+    Does not modify the input
+    Already complete board is returned as it is
+    '''
+    
+    if not sudoku_board_is_valid(board):
+        raise ValueError("Clues contradict each other")
+    board_copy = [row.copy() for row in board]
+    
+    def backtrack(board, row, col):
+        if row == 9:
+            return board
+        elif col == 9:
+            return backtrack(board, row+1, 0)
+        elif board[row][col] != 0:
+            return backtrack(board, row, col+1)
+        else:
+            for num in range(1,10):
+                if sudoku_is_safe(board, row, col, num):
+                    board[row][col] = num
+                    result = backtrack(board, row, col+1)
+                    if result:
+                        return result
+                    board[row][col] = 0
+            return None
+
+    return backtrack(board_copy, 0, 0)
