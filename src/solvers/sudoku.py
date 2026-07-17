@@ -13,15 +13,21 @@ e.g.
 """
 
 
-# input file path, output board string
 def read_sudoku_file(path):
-
+    """
+    Read the text file with path and return the content as a string.
+    """
     with open(path) as f:
         return f.read()
 
-
-# input board string, output board 2D list
 def parse_sudoku(board_str):
+    """
+    Parse the string representing a board and return a 2D list.
+    Raise ValueError if:
+    - the board has more than or less than 9 rows
+    - one of the rows has more than or less than 9 cells
+    - one of the cells is not an integer from 0 to 9
+    """
 
     line_list = board_str.strip().split('\n')
     if len(line_list) != 9:
@@ -39,10 +45,12 @@ def parse_sudoku(board_str):
         
     return output_list
 
-
-# Checks whether a value can occupy a coordinate while ignoring only the value currently at that coordinate
 def sudoku_is_safe(board, row, col, num):
-
+    """
+    Check whether a value can occupy a cell with coordinates (row, col) without conflict, 
+    while ignoring only the value currently at that coordinate.
+    Raise ValueError if num is not an integer from 1 to 9.
+    """
     # num not from 1-9
     if num not in range(1,10):
         raise ValueError("num not from 1 to 9")
@@ -68,29 +76,28 @@ def sudoku_is_safe(board, row, col, num):
     
     return True
 
-
-# Checks whether all existing non-zero cells are mutually consistent
 def sudoku_board_is_valid(board):
+    """
+    Check whether all existing non-zero cells (clues) are mutually consistent.
+    """
     for row in range(9):
         for col in range(9):
             if board[row][col] != 0 and not sudoku_is_safe(board, row, col, board[row][col]):
                 return False
     return True
 
-
 def solve_sudoku(board):
     '''
-    Validates the initial clues
-    Raises ValueError if clues contradict each other
-    Solves a copy
-    Returns the solved copy
-    Returns None if no solution exists
-    Does not modify the input
+    Validate the initial clues and raise ValueError if clues contradict each other
+    Solve and return a copy of the board, along with the number of times the algorithm considers a number placement.
+    Return None if no solution exists
+    Do not modify the input
     Already complete board is returned as it is
     '''
     
     if not sudoku_board_is_valid(board):
         raise ValueError("Clues contradict each other")
+    
     board_copy = [row.copy() for row in board]
     
     def backtrack(board, row, col):
