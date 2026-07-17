@@ -39,7 +39,9 @@ puzzle-solver-playground/
 │       └── display.py
 ├── tests/
 │   ├── test_n_queens.py
-│   └── test_sudoku.py
+│   ├── test_sudoku_parser.py
+│   ├── test_sudoku_validation.py
+│   └── test_sudoku_solver.py
 └── examples/
     ├── sudoku_easy.txt
     └── sudoku_invalid.txt
