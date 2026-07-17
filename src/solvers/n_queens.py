@@ -1,4 +1,4 @@
-'''
+"""
 N-Queens board representation:
 For n*n board, a list of n integers such that the i th integer represents the column position of the queen on the i-th row.
 Indexes are zero-based.
@@ -8,10 +8,10 @@ e.g. [2,0,3,1] means there are 4 queens at (0,2), (1,0), (2,3), (3,1), or:
 Q . . .
 . . . Q
 . Q . .
-'''
+"""
+
 
 def n_queens_is_safe(board, row, col):
-
     """
     Return True if a queen can be placed at (row, col)
     without attacking any existing queens.
@@ -24,6 +24,10 @@ def n_queens_is_safe(board, row, col):
     return True
 
 def solve_n_queens(n):
+    """
+    Return a list containing all solutions for a n*n board, 
+    and the number of times the algorithm considers a queen placement.
+    """
     if n < 0:
         raise ValueError("solve_n_queens() does not accept negative integers")
     if n == 0: 
