@@ -18,6 +18,10 @@ Backtracking: Place one queen in each row. For every row, try each column and co
 
 On a $9 \times 9$ board divided into 9 $3 \times 3$ boxes, some integers from 1 to 9 are filled in some cells. Fill in the rest of the cells with integers from 1 to 9 such that no two same numbers share the same row, column or box.
 
+#### Algorithms used
+
+Backtracking: Starting from the top left corner, for every cell from top to bottom, then from left to right, try putting an integer from 1 to 9 and continue recursively whenever the cell does not conflict with other cells. If no valid numbers exist for this cell, backtrack to the previous cell.
+
 ## Structure
 
 ```text
