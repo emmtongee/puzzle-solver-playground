@@ -45,7 +45,7 @@ puzzle-solver-playground/
 │   └── test_sudoku_solver.py
 └── examples/
     ├── sudoku_easy.txt
-    └── sudoku_invalid.txt
+    └── sudoku_hard.txt
 ```
 
 ## How to use
