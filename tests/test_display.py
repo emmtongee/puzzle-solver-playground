@@ -20,7 +20,7 @@ def test_sudoku_display_format():
         [0, 0, 0, 4, 1, 9, 0, 0, 5], 
         [0, 0, 0, 0, 8, 0, 0, 7, 9]
     ]
-    assert format_sudoku_board() == (
+    assert format_sudoku_board(board) == (
         "5 3 . | . 7 . | . . .\n"
         "6 . . | 1 9 5 | . . .\n"
         ". 9 8 | . . . | . 6 .\n"
