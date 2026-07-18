@@ -50,7 +50,7 @@ puzzle-solver-playground/
 
 ## How to use
 
-To run the N-Queens demonstration:
+To run the demonstration:
 
 ```bash
 python -m src.main
