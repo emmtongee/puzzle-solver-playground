@@ -30,7 +30,10 @@ def test_solve_one_empty_cell():
         [5, 9, 8, 2, 6, 1, 7, 3, 4], 
         [6, 1, 4, 7, 3, 8, 5, 9, 2]
     ]
-    assert (solve_sudoku(board)[0])[4][4] == 4
+    solved_board, candidates_checked = solve_sudoku(board)
+
+    assert solved_board[4][4] == 4
+    assert candidates_checked > 0
 
 def test_unsolvable_board():
     board = [
