@@ -1,6 +1,6 @@
 import pytest
 
-from src.solvers.sudoku import read_sudoku_file, parse_sudoku, solve_sudoku, sudoku_board_is_valid
+from src.solvers.sudoku import read_sudoku_file, parse_sudoku, solve_sudoku
 
 
 def test_contradictory_board():
@@ -30,7 +30,7 @@ def test_solve_one_empty_cell():
         [5, 9, 8, 2, 6, 1, 7, 3, 4], 
         [6, 1, 4, 7, 3, 8, 5, 9, 2]
     ]
-    assert solve_sudoku(board)[4][4] == 4
+    assert (solve_sudoku(board)[0])[4][4] == 4
 
 def test_unsolvable_board():
     board = [
@@ -44,7 +44,9 @@ def test_unsolvable_board():
         [0, 9, 8, 2, 0, 0, 7, 3, 4],
         [0, 1, 4, 7, 3, 8, 0, 0, 0]
     ]
-    assert solve_sudoku(board) is None
+    solved_board, candidates_checked = solve_sudoku(board)
+    assert solved_board is None
+    assert candidates_checked > 0
 
 def test_already_complete_board():
     board = [
@@ -58,12 +60,14 @@ def test_already_complete_board():
         [5, 9, 8, 2, 6, 1, 7, 3, 4], 
         [6, 1, 4, 7, 3, 8, 5, 9, 2]
     ]
-    assert solve_sudoku(board) == board
+    solved_board, candidates_checked = solve_sudoku(board)
+    assert solved_board == board
+    assert candidates_checked == 0
 
 def test_solve_easy_board():
     board = parse_sudoku(read_sudoku_file("examples/sudoku_easy.txt"))
     original_board = [row.copy() for row in board]
-    solved_board = solve_sudoku(board)
+    solved_board, candidates_checked = solve_sudoku(board)
 
     assert board == original_board
 
@@ -80,3 +84,5 @@ def test_solve_easy_board():
     ]
 
     assert solved_board == expected_solution_board
+    assert candidates_checked > 0
+    assert type(candidates_checked) is int

@@ -90,9 +90,9 @@ def solve_sudoku(board):
     '''
     Validate the initial clues and raise ValueError if clues contradict each other
     Solve and return a copy of the board, along with the number of times the algorithm considers a number placement.
-    Return None if no solution exists
+    Return None board if no solution exists
     Do not modify the input
-    Already complete board is returned as it is
+    Already complete board is returned as its copy
     '''
     
     if not sudoku_board_is_valid(board):
@@ -100,21 +100,22 @@ def solve_sudoku(board):
     
     board_copy = [row.copy() for row in board]
     
-    def backtrack(board, row, col):
+    def backtrack(board, row, col, candidates_checked):
         if row == 9:
-            return board
+            return board, candidates_checked
         elif col == 9:
-            return backtrack(board, row+1, 0)
+            return backtrack(board, row+1, 0, candidates_checked)
         elif board[row][col] != 0:
-            return backtrack(board, row, col+1)
+            return backtrack(board, row, col+1, candidates_checked)
         else:
             for num in range(1,10):
+                candidates_checked += 1
                 if sudoku_is_safe(board, row, col, num):
                     board[row][col] = num
-                    result = backtrack(board, row, col+1)
+                    result, candidates_checked = backtrack(board, row, col+1, candidates_checked)
                     if result:
-                        return result
+                        return result, candidates_checked
                     board[row][col] = 0
-            return None
+            return None, candidates_checked
 
-    return backtrack(board_copy, 0, 0)
+    return backtrack(board_copy, 0, 0, 0)
