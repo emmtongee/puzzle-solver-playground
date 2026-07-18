@@ -1,7 +1,6 @@
 import pytest
 
 from src.solvers.n_queens import n_queens_is_safe, solve_n_queens
-from src.utils.display import format_n_queens_board
 
 
 def test_same_column_is_unsafe():
@@ -51,11 +50,3 @@ def test_states_checked_is_int():
 def test_states_checked_is_positive():
     for i in (1,4):
         assert solve_n_queens(i)[1] > 0
-
-def test_display_format():
-    assert format_n_queens_board([1, 3, 0, 2]) == (
-        ". Q . .\n"
-        ". . . Q\n"
-        "Q . . .\n"
-        ". . Q ."
-    )

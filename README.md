@@ -38,6 +38,7 @@ puzzle-solver-playground/
 │       ├── __init__.py
 │       └── display.py
 ├── tests/
+│   ├── test_display.py
 │   ├── test_n_queens.py
 │   ├── test_sudoku_parser.py
 │   ├── test_sudoku_validation.py
