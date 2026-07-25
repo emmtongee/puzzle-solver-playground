@@ -88,11 +88,11 @@ def sudoku_board_is_valid(board):
 
 def solve_sudoku(board):
     '''
-    Validate the initial clues and raise ValueError if clues contradict each other
+    Validate the initial clues and raise ValueError if clues contradict each other.
     Solve and return a copy of the board, along with the number of times the algorithm considers a number placement.
-    Return None board if no solution exists
-    Do not modify the input
-    Already complete board is returned as its copy
+    Return None board if no solution exists.
+    Do not modify the input.
+    Already complete board is returned as its copy.
     '''
     
     if not sudoku_board_is_valid(board):

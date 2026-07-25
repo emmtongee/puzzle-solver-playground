@@ -3,7 +3,7 @@ import pytest
 from src.solvers.sudoku import read_sudoku_file, parse_sudoku, solve_sudoku, sudoku_get_cell_candidates, sudoku_select_mrv_cell
 
 
-def test_contradictory_board():
+def test_solve_contradictory_board():
     board = [
         [4, 8, 0, 0, 5, 0, 0, 2, 3], # 5th col 5 contradicts with 5 below
         [0, 5, 0, 0, 0, 0, 0, 6, 7],
@@ -35,7 +35,7 @@ def test_solve_one_empty_cell():
     assert solved_board[4][4] == 4
     assert candidates_checked > 0
 
-def test_unsolvable_board():
+def test_solve_unsolvable_board():
     board = [
         [4, 8, 1, 0, 0, 0, 0, 2, 3], 
         [0, 5, 0, 0, 0, 0, 0, 6, 7],
@@ -51,7 +51,7 @@ def test_unsolvable_board():
     assert solved_board is None
     assert candidates_checked > 0
 
-def test_already_complete_board():
+def test_solve_already_complete_board():
     board = [
         [4, 8, 7, 6, 1, 5, 9, 2, 3], 
         [9, 5, 1, 3, 2, 4, 8, 6, 7], 
