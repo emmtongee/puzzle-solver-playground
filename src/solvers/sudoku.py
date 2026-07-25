@@ -119,3 +119,48 @@ def solve_sudoku(board):
             return None, candidates_checked
 
     return backtrack(board_copy, 0, 0, 0)
+
+def sudoku_get_cell_candidates(board, row, col):
+    """
+    Return a list of valid candidates in ascending order, for the empty cell at (row, col).
+    The board is not modified.
+    Assume the board is valid and the specified cell is empty. 
+    """
+    valid_candidates = []
+    for candidate in range(1, 10):
+        if sudoku_is_safe(board, row, col, candidate):
+            valid_candidates.append(candidate)
+    return valid_candidates
+
+
+def sudoku_select_mrv_cell(board):
+    """
+    Select the empty cell with the fewest legal candidates.
+    Ties are resolved in row-major order (from top to bottom, then from left to right).
+
+    Return None if the board has no empty cells. 
+    Otherwise, return ((row, col), candidates). 
+    An empty candidate list indicates a dead-end board state.
+
+    The board is assumed to be valid and is not modified.
+    """
+    target_cell = None
+    target_candidate_num = 10 # at most 9 candidates
+    target_candidate_list = None
+
+    for row in range(9):
+        for col in range(9):
+            if board[row][col] == 0:
+                current_candidate_list = sudoku_get_cell_candidates(board, row, col)
+                current_candidate_num = len(current_candidate_list)
+                if current_candidate_num < target_candidate_num:
+                    target_cell = (row, col)
+                    target_candidate_num = current_candidate_num
+                    target_candidate_list = current_candidate_list
+
+                    if current_candidate_num == 0:
+                        return (target_cell, [])
+
+    if target_cell is None:
+        return None
+    return (target_cell, target_candidate_list)
