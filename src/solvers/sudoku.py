@@ -10,6 +10,11 @@ e.g.
     [6, 0, 0, 1, 9, 5, 0, 0, 0],
     ...
 ]
+
+Candidate-check count:
+The number of candidate values tested for validity at a cell during the search.
+
+A candidate check is one call to sudoku_is_safe during the search.
 """
 
 
@@ -89,8 +94,8 @@ def sudoku_board_is_valid(board):
 def solve_sudoku(board):
     '''
     Validate the initial clues and raise ValueError if clues contradict each other.
-    Solve and return a copy of the board, along with the number of times the algorithm considers a number placement.
-    Return None board if no solution exists.
+    Solve and return a copy of the board, along with the candidate-check count.
+    If no solution exists, return None as the board together with the count.
     Do not modify the input.
     Already complete board is returned as its copy.
     '''
@@ -113,7 +118,7 @@ def solve_sudoku(board):
                 if sudoku_is_safe(board, row, col, num):
                     board[row][col] = num
                     result, candidates_checked = backtrack(board, row, col+1, candidates_checked)
-                    if result:
+                    if result is not None:
                         return result, candidates_checked
                     board[row][col] = 0
             return None, candidates_checked
@@ -122,15 +127,18 @@ def solve_sudoku(board):
 
 def sudoku_get_cell_candidates(board, row, col):
     """
-    Return a list of valid candidates in ascending order, for the empty cell at (row, col).
+    For the empty cell at (row, col),
+    return a list of its valid candidates in ascending order, and the candidate-check count.
     The board is not modified.
     Assume the board is valid and the specified cell is empty. 
     """
     valid_candidates = []
+    candidates_checked = 0
     for candidate in range(1, 10):
+        candidates_checked += 1
         if sudoku_is_safe(board, row, col, candidate):
             valid_candidates.append(candidate)
-    return valid_candidates
+    return valid_candidates, candidates_checked
 
 
 def sudoku_select_mrv_cell(board):
@@ -138,29 +146,66 @@ def sudoku_select_mrv_cell(board):
     Select the empty cell with the fewest legal candidates.
     Ties are resolved in row-major order (from top to bottom, then from left to right).
 
-    Return None if the board has no empty cells. 
-    Otherwise, return ((row, col), candidates). 
+    Return (None, None, None, 0) if the board has no empty cells. 
+    Otherwise, return the selected row, column, candidates, and total candidate-check count during selection.
     An empty candidate list indicates a dead-end board state.
 
     The board is assumed to be valid and is not modified.
     """
-    target_cell = None
+    target_row, target_col = None, None
     target_candidate_num = 10 # at most 9 candidates
     target_candidate_list = None
+    candidates_checked = 0
 
     for row in range(9):
         for col in range(9):
             if board[row][col] == 0:
-                current_candidate_list = sudoku_get_cell_candidates(board, row, col)
+                current_candidate_list, candidate_increment = (
+                    sudoku_get_cell_candidates(board, row, col)
+                )
                 current_candidate_num = len(current_candidate_list)
+                candidates_checked += candidate_increment
+
                 if current_candidate_num < target_candidate_num:
-                    target_cell = (row, col)
+                    (target_row, target_col) = (row, col)
                     target_candidate_num = current_candidate_num
                     target_candidate_list = current_candidate_list
 
                     if current_candidate_num == 0:
-                        return (target_cell, [])
+                        return (row, col, [], candidates_checked)
 
-    if target_cell is None:
-        return None
-    return (target_cell, target_candidate_list)
+    if target_row is None:
+        return None, None, None, 0
+    return target_row, target_col, target_candidate_list, candidates_checked
+
+def mrv_solve_sudoku(board):
+    """
+    Validate the initial clues and raise ValueError if clues contradict each other.
+    Solve and return a copy of the board, along with the candidate-check count.
+    If no solution exists, return None as the board together with the count.
+    Use MRV algorithm.
+    Do not modify the input.
+    Already complete board is returned as its copy.
+    """
+    
+    if not sudoku_board_is_valid(board):
+        raise ValueError("Clues contradict each other")
+    
+    board_copy = [row.copy() for row in board]
+    
+    def backtrack(board, candidates_checked):
+        row, col, candidate_list, check_count = sudoku_select_mrv_cell(board)
+        candidates_checked += check_count
+        if row is None:
+            return board, candidates_checked
+        if candidate_list == []:
+            return None, candidates_checked
+        for candidate in candidate_list:
+            board[row][col] = candidate
+            result, candidates_checked = backtrack(board, candidates_checked)
+            if result is not None:
+                return result, candidates_checked
+            board[row][col] = 0
+        return None, candidates_checked
+
+    return backtrack(board_copy, 0)
