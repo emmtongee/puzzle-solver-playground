@@ -12,65 +12,60 @@ Given an $n \times n$ chessboard, place $n$ queens such that no two queens share
 
 #### Algorithms used
 
-Backtracking: Place one queen in each row. For every row, try each column and continue recursively whenever the placement does not conflict with an existing queen. If no valid placement remains, backtrack to the previous row.
+**Backtracking**: Place one queen in each row. For every row, try each column and continue recursively whenever the placement does not conflict with an existing queen. If no valid placement remains, backtrack to the previous row.
 
 ### Sudoku
 
-On a $9 \times 9$ board divided into 9 $3 \times 3$ boxes, some integers from 1 to 9 are filled in some cells. Fill in the rest of the cells with integers from 1 to 9 such that no two same numbers share the same row, column or box.
+On a $9 \times 9$ board divided into 9 $3 \times 3$ boxes, some integers from 1 to 9 are filled in some cells. Fill the remaining cells so that each row, column, and 3 × 3 box contains every integer from 1 to 9 exactly once.
 
 #### Algorithms used
 
-Backtracking: Starting from the top left corner, for every cell from top to bottom, then from left to right, try putting an integer from 1 to 9 and continue recursively whenever the cell does not conflict with other cells. If no valid numbers exist for this cell, backtrack to the previous cell.
+**Naive backtracking:** Select the first empty cell in row-major order. Try candidate values from 1 to 9 and continue recursively whenever a placement is valid. If no candidate leads to a solution, backtrack to the previous decision.
 
-## Structure
-
-```text
-puzzle-solver-playground/
-├── README.md
-├── src/
-│   ├── __init__.py
-│   ├── main.py
-│   ├── solvers/
-│   │   ├── __init__.py
-│   │   ├── n_queens.py
-│   │   └── sudoku.py
-│   └── utils/
-│       ├── __init__.py
-│       └── display.py
-├── tests/
-│   ├── test_display.py
-│   ├── test_n_queens.py
-│   ├── test_sudoku_parser.py
-│   ├── test_sudoku_validation.py
-│   └── test_sudoku_solver.py
-└── examples/
-    ├── sudoku_easy.txt
-    └── sudoku_hard.txt
-```
+**Minimum Remaining Values backtracking:** Select the empty cell with the fewest legal candidates. Ties are resolved in row-major order. Try the candidates in ascending order and backtrack when a candidate does not lead to a solution.
 
 ## How to use
 
 To run the demonstration:
 
 ```bash
-python -m src.main
+python3 -m src.main
 ```
 
 To run the tests:
 
 ```bash
-python -m pytest
+python3 -m pytest
 ```
+
+To compare the naive and MRV Sudoku solvers:
+
+```bash
+python3 -m benchmarks.sudoku_comparison
+```
+
+The raw measurements and analysis are available in [benchmarks/sudoku_results.md](benchmarks/sudoku_results.md).
 
 ## Current Progress
 
-- [x] N-Queens backtracking solver
+### N-Queens
+
+- [x] Backtracking solver
 - [x] Board display
 - [x] Search-state counter
 - [x] Runtime measurement
-- [x] N-Queens tests
-- [ ] Sudoku backtracking solver
-- [ ] Sudoku MRV heuristic
+- [x] Tests
+
+### Sudoku
+
+- [x] Parsing and validation
+- [x] Naive backtracking solver
+- [x] MRV backtracking solver
+- [x] Candidate-check and runtime comparison
+- [x] Tests
+
+### Planned
+
 - [ ] 0/1 Knapsack brute force
 - [ ] 0/1 Knapsack dynamic programming
 - [ ] CLI benchmark command
