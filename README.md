@@ -24,6 +24,14 @@ On a $9 \times 9$ board divided into 9 $3 \times 3$ boxes, some integers from 1 
 
 **Minimum Remaining Values backtracking:** Select the empty cell with the fewest legal candidates. Ties are resolved in row-major order. Try the candidates in ascending order and backtrack when a candidate does not lead to a solution.
 
+### 0/1 Knapsack
+
+Given $n$ items, each with weight $w_i$ and value $v_i$, and a knapsack with capacity $c$, where $n, w_i, v_i, c$ are non-negative integers. Each item may either be selected once or not selected. Find a combination of items whose total weight does not exceed the capacity and whose total value is maximized.
+
+#### Algorithm used
+
+**Brute force**: Examine every possible combination and select the one with the maximum total value that does not exceed the capacity.
+
 ## How to use
 
 To run the demonstration:
@@ -66,6 +74,6 @@ The raw measurements and analysis are available in [benchmarks/sudoku_results.md
 
 ### Planned
 
-- [ ] 0/1 Knapsack brute force
+- [x] 0/1 Knapsack brute force
 - [ ] 0/1 Knapsack dynamic programming
 - [ ] CLI benchmark command
