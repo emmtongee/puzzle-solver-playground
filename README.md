@@ -32,6 +32,8 @@ Given $n$ items, each with weight $w_i$ and value $v_i$, and a knapsack with cap
 
 **Brute force**: Examine every possible combination and select the one with the maximum total value that does not exceed the capacity.
 
+**Bottom-up dynamic programming**: Solve smaller subproblems defined by the number of available items and the knapsack capacity. Store their optimal results in a table, then use those results to build solutions for larger subproblems until the original problem is solved.
+
 ## How to use
 
 To run the demonstration:

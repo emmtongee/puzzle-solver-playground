@@ -59,6 +59,7 @@ def solve_knapsack(items, capacity):
     Do not modify the input.
     """
 
+    # validation
     if not knapsack_problem_is_valid(items, capacity):
         raise ValueError("Input is invalid")
     
@@ -77,3 +78,49 @@ def solve_knapsack(items, capacity):
             max_total_value_indices = indices
 
     return max_total_value, max_total_value_indices
+
+def dynamic_solve_knapsack(items, capacity):
+    """
+    Solve the Knapsack problem using bottom-up dynamic programming.
+    Return the maximum total value and a set of indices of selected items.
+
+    If two or more combinations produce the same maximum total value, 
+    the combination whose index set has the least binary sum is selected.
+    Do not modify the input.
+    """
+
+    # validation
+    if not knapsack_problem_is_valid(items, capacity):
+        raise ValueError("Input is invalid")
+    
+    # construct the DP table and its first row
+    # each cell contains the max total value and the corresponding index set
+    # the first 0 items always have value 0
+    dp_table = [[(0, set()) for _ in range(capacity + 1)]]
+
+    for num_of_items in range(1, len(items) + 1):
+        dp_table.append([])
+        for allowed_capacity in range(capacity + 1):
+
+            prev_cell_if_item_not_added = dp_table[num_of_items - 1][allowed_capacity]
+            max_total_value_if_item_not_added = prev_cell_if_item_not_added[0]
+
+            current_item = items[num_of_items - 1]
+            prev_capacity = allowed_capacity - current_item[0]
+            if prev_capacity >= 0:
+                prev_cell_if_item_added = dp_table[num_of_items - 1][prev_capacity]
+                max_total_value_if_item_added = prev_cell_if_item_added[0] + current_item[1]
+            else:
+                max_total_value_if_item_added = -1
+
+            # On equal values, exclude the current item. Its binary value is
+            # greater than the combined binary value of all earlier item indices.
+            if max_total_value_if_item_not_added >= max_total_value_if_item_added:
+                index_set = prev_cell_if_item_not_added[1].copy()
+                dp_table[num_of_items].append((max_total_value_if_item_not_added, index_set))
+            else:
+                index_set = prev_cell_if_item_added[1].copy()
+                index_set.add(num_of_items - 1)
+                dp_table[num_of_items].append((max_total_value_if_item_added, index_set))
+
+    return dp_table[len(items)][capacity]
