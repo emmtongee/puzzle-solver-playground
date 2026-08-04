@@ -37,54 +37,57 @@ def test_solve_normal_problem():
     items = [(2, 3), (3, 4), (4, 5), (5, 8)]
     original_items = items.copy()
     capacity = 7
-    assert solve_knapsack(items, capacity) == (11, {0, 3})
+    solution, subsets_checked = solve_knapsack(items, capacity)
+    assert solution == (11, {0, 3})
     assert items == original_items
+    assert subsets_checked > 0
+    assert type(subsets_checked) is int
 
 def test_solve_empty_items():
     items = []
     capacity = 2
-    assert solve_knapsack(items, capacity) == (0, set())
+    assert solve_knapsack(items, capacity) == ((0, set()), 1)
 
 def test_solve_no_fitting_items():
     items = [(2, 3), (3, 4), (4, 5), (5, 8)]
     capacity = 1
-    assert solve_knapsack(items, capacity) == (0, set())
+    assert solve_knapsack(items, capacity)[0] == (0, set())
 
 def test_solve_tiebreaking():
     items = [(2, 3), (3, 4), (4, 5), (5, 6)]
     capacity = 7
-    assert solve_knapsack(items, capacity) == (9, {1, 2})
+    assert solve_knapsack(items, capacity)[0] == (9, {1, 2})
 
 def test_solve_duplicate_items():
     items = [(2, 3), (2, 3), (4, 5), (5, 6)]
     capacity = 4
-    assert solve_knapsack(items, capacity) == (6, {0, 1})
+    assert solve_knapsack(items, capacity)[0] == (6, {0, 1})
 
 def test_solve_zero_weight():
     items = [(0, 3), (3, 4), (4, 5), (5, 8)]
     capacity = 4
-    assert solve_knapsack(items, capacity) == (8, {0, 2})
+    assert solve_knapsack(items, capacity)[0] == (8, {0, 2})
 
 def test_solve_zero_value():
     items = [(2, 3), (3, 4), (4, 0), (5, 8)]
     capacity = 4
-    assert solve_knapsack(items, capacity) == (4, {1})
+    assert solve_knapsack(items, capacity)[0] == (4, {1})
 
 def test_solve_zero_capacity():
     # without zero-weight items
     items = [(2, 3), (3, 4), (4, 5), (5, 8)]
     capacity = 0
-    assert solve_knapsack(items, capacity) == (0, set())
+    assert solve_knapsack(items, capacity)[0] == (0, set())
 
     # with zero-weight zero-value items
     items = [(0, 0), (3, 4), (4, 5), (5, 8)]
     capacity = 0
-    assert solve_knapsack(items, capacity) == (0, set())
+    assert solve_knapsack(items, capacity)[0] == (0, set())
 
     # with zero-weight nonzero-value items
     items = [(2, 3), (3, 4), (0, 5), (5, 8)]
     capacity = 0
-    assert solve_knapsack(items, capacity) == (5, {2})
+    assert solve_knapsack(items, capacity)[0] == (5, {2})
 
 def test_solve_negative_input():
     # negative weight
@@ -110,54 +113,57 @@ def test_dynamic_solve_normal_problem():
     items = [(2, 3), (3, 4), (4, 5), (5, 8)]
     original_items = items.copy()
     capacity = 7
-    assert dynamic_solve_knapsack(items, capacity) == (11, {0, 3})
+    solution, states_calculated = dynamic_solve_knapsack(items, capacity)
+    assert solution == (11, {0, 3})
     assert items == original_items
+    assert states_calculated > 0
+    assert type(states_calculated) is int
 
 def test_dynamic_solve_empty_items():
     items = []
     capacity = 2
-    assert dynamic_solve_knapsack(items, capacity) == (0, set())
+    assert dynamic_solve_knapsack(items, capacity) == ((0, set()), 0)
 
 def test_dynamic_solve_no_fitting_items():
     items = [(2, 3), (3, 4), (4, 5), (5, 8)]
     capacity = 1
-    assert dynamic_solve_knapsack(items, capacity) == (0, set())
+    assert dynamic_solve_knapsack(items, capacity)[0] == (0, set())
 
 def test_dynamic_solve_tiebreaking():
     items = [(2, 3), (3, 4), (4, 5), (5, 6)]
     capacity = 7
-    assert dynamic_solve_knapsack(items, capacity) == (9, {1, 2})
+    assert dynamic_solve_knapsack(items, capacity)[0] == (9, {1, 2})
 
 def test_dynamic_solve_duplicate_items():
     items = [(2, 3), (2, 3), (4, 5), (5, 6)]
     capacity = 4
-    assert dynamic_solve_knapsack(items, capacity) == (6, {0, 1})
+    assert dynamic_solve_knapsack(items, capacity)[0] == (6, {0, 1})
 
 def test_dynamic_solve_zero_weight():
     items = [(0, 3), (3, 4), (4, 5), (5, 8)]
     capacity = 4
-    assert dynamic_solve_knapsack(items, capacity) == (8, {0, 2})
+    assert dynamic_solve_knapsack(items, capacity)[0] == (8, {0, 2})
 
 def test_dynamic_solve_zero_value():
     items = [(2, 3), (3, 4), (4, 0), (5, 8)]
     capacity = 4
-    assert dynamic_solve_knapsack(items, capacity) == (4, {1})
+    assert dynamic_solve_knapsack(items, capacity)[0] == (4, {1})
 
 def test_dynamic_solve_zero_capacity():
     # without zero-weight items
     items = [(2, 3), (3, 4), (4, 5), (5, 8)]
     capacity = 0
-    assert dynamic_solve_knapsack(items, capacity) == (0, set())
+    assert dynamic_solve_knapsack(items, capacity)[0] == (0, set())
 
     # with zero-weight zero-value items
     items = [(0, 0), (3, 4), (4, 5), (5, 8)]
     capacity = 0
-    assert dynamic_solve_knapsack(items, capacity) == (0, set())
+    assert dynamic_solve_knapsack(items, capacity)[0] == (0, set())
 
     # with zero-weight nonzero-value items
     items = [(2, 3), (3, 4), (0, 5), (5, 8)]
     capacity = 0
-    assert dynamic_solve_knapsack(items, capacity) == (5, {2})
+    assert dynamic_solve_knapsack(items, capacity)[0] == (5, {2})
 
 def test_dynamic_solve_negative_input():
     # negative weight
@@ -186,4 +192,4 @@ def test_both_solvers_produce_same_output_for_same_input():
         ([(2, 3), (2, 3), (4, 5), (5, 6)], 4),  # duplicate items
         ([(0, 3), (3, 4), (4, 5), (5, 8)], 4)   # zero-weight item
     ):
-        assert solve_knapsack(items, capacity) == dynamic_solve_knapsack(items, capacity)
+        assert solve_knapsack(items, capacity)[0] == dynamic_solve_knapsack(items, capacity)[0]

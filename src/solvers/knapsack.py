@@ -51,8 +51,9 @@ def number_power_set(num):
 def solve_knapsack(items, capacity):
     """
     Solve the Knapsack problem, 
-    i.e. select the items such that the total weight does not exceed the capacity and the total value is maximum.
-    Return the maximum total value and a set of indices of selected items.
+    i.e. select the items such that the total weight does not exceed the capacity and the total value is maximized.
+    Return the maximum total value and a set of indices of selected items, 
+    along with the number of subsets of items evaluated, including the empty subset.
 
     If two or more combinations produce the same maximum total value, 
     the combination whose index set has the least binary sum is selected.
@@ -65,8 +66,10 @@ def solve_knapsack(items, capacity):
     
     max_total_value = -1
     max_total_value_indices = None
+    subsets_checked = 0
 
     for indices in number_power_set(len(items)):
+        subsets_checked += 1
         total_value = 0
         total_weight = 0
         for index in indices:
@@ -77,12 +80,14 @@ def solve_knapsack(items, capacity):
             max_total_value = total_value
             max_total_value_indices = indices
 
-    return max_total_value, max_total_value_indices
+    return (max_total_value, max_total_value_indices), subsets_checked
 
 def dynamic_solve_knapsack(items, capacity):
     """
     Solve the Knapsack problem using bottom-up dynamic programming.
-    Return the maximum total value and a set of indices of selected items.
+    Return the maximum total value and a set of indices of selected items,
+    along with the number of non-initial table states calculated.
+    Initialization states are excluded.
 
     If two or more combinations produce the same maximum total value, 
     the combination whose index set has the least binary sum is selected.
@@ -97,10 +102,13 @@ def dynamic_solve_knapsack(items, capacity):
     # each cell contains the max total value and the corresponding index set
     # the first 0 items always have value 0
     dp_table = [[(0, set()) for _ in range(capacity + 1)]]
+    states_calculated = 0
 
     for num_of_items in range(1, len(items) + 1):
         dp_table.append([])
         for allowed_capacity in range(capacity + 1):
+
+            states_calculated += 1
 
             prev_cell_if_item_not_added = dp_table[num_of_items - 1][allowed_capacity]
             max_total_value_if_item_not_added = prev_cell_if_item_not_added[0]
@@ -123,4 +131,4 @@ def dynamic_solve_knapsack(items, capacity):
                 index_set.add(num_of_items - 1)
                 dp_table[num_of_items].append((max_total_value_if_item_added, index_set))
 
-    return dp_table[len(items)][capacity]
+    return dp_table[len(items)][capacity], states_calculated
