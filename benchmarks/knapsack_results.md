@@ -1,4 +1,8 @@
-```
+# Knapsack Comparison Results
+
+Each solver is called five times for each input size, using a fixed capacity of 20. The results are as follows:
+
+```text
 Knapsack Comparison
 -----------------------------
 Number of items: 4
@@ -66,3 +70,17 @@ Solution returned: True
 Brute Force and DP solutions equal: True
 -----------------------------
 ```
+
+## Analysis
+
+- With four items, brute force was faster in these recorded runs. As the number of items increased, the runtimes of the brute force solver increased drastically, while the runtimes of the DP solver remained low and increased only slightly.
+
+- In the brute force solver, each item is either selected or not selected, so there are $2^n$ subsets in total. The number of subsets grows exponentially.
+
+- In the DP solver, it solves a subproblem for each number of items considered (from $0$ to $n$) and for each capacity (from $0$ to $C$). The $C+1$ subproblems with $0$ items are trivial, so there are $n(C+1)$ subproblems to be solved. With capacity fixed at $20$, the number of subproblems grows linearly.
+
+- In these cases, only the number of items is growing while the capacity is fixed. Since linear growth is much slower than exponential growth, the DP solver scaled better.
+
+- However, the DP solver is not always better since the state count also scales with the capacity. A small number of items and high capacity can make DP slower and more memory-intensive. The brute force solver has less overhead than the DP solver, so it can be more competitive for tiny inputs and with high capacity.
+
+- Subset evaluations and DP-state calculations represent different operations, so their counts should be used to show growth patterns rather than compared as equal units of work.

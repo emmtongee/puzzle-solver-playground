@@ -54,7 +54,7 @@ To compare the naive and MRV Sudoku solvers:
 python3 -m benchmarks.sudoku_comparison
 ```
 
-The raw measurements and analysis are available in [benchmarks/sudoku_results.md](benchmarks/sudoku_results.md).
+The raw measurements and analysis are available in [benchmarks/sudoku_results.md](benchmarks/sudoku_results.md) and [benchmarks/knapsack_results.md](benchmarks/knapsack_results.md).
 
 ## Current Progress
 
@@ -74,8 +74,12 @@ The raw measurements and analysis are available in [benchmarks/sudoku_results.md
 - [x] Candidate-check and runtime comparison
 - [x] Tests
 
+### Knapsack
+
+- [x] 0/1 Knapsack brute-force solver
+- [x] 0/1 Knapsack dynamic-programming solver
+- [x] Knapsack performance comparison
+
 ### Planned
 
-- [x] 0/1 Knapsack brute force
-- [ ] 0/1 Knapsack dynamic programming
 - [ ] CLI benchmark command
