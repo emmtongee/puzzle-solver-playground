@@ -14,7 +14,10 @@ Binary sum: sum of 2 to the power of the elements
 e.g. the binary sum of {0,2} is 2^0+2^2 = 5
 """
 
-def knapsack_problem_is_valid(items, capacity):
+def knapsack_problem_is_valid(
+    items: list[tuple[int, int]],
+    capacity: int,
+) -> bool:
     """
     Validate the problem.
     If any of the following is true, return False:
@@ -30,25 +33,36 @@ def knapsack_problem_is_valid(items, capacity):
             return False
     return True
 
-def number_power_set(num):
+def number_power_set(num: int) -> list[set[int]]:
     """
     Return a list of all subsets of the set {0, 1, 2, ..., num - 1}, 
     in the ascending order of the binary sum.
     e.g. number_power_set(3) -> [{}, {0}, {1}, {0,1}, {2}, {0,2}, {1,2}, {0,1,2}]
     """
-    output_list = []
-    def recurse(index, number_set):
-        if index == -1:
+    output_list: list[set[int]] = []
+    def recurse(n, number_set):
+
+        # every number has now been either excluded or included
+        if n == -1:
             output_list.append(number_set.copy())
             return
-        recurse(index - 1, number_set)
-        number_set.add(index)
-        recurse(index - 1, number_set)
-        number_set.remove(index)
+
+        # explore subsets excluding n first
+        # every such subset has a smaller binary sum than
+        # every subset containing n, because:
+        # 2**n > 2**(n - 1) + 2**(n - 2) + ... + 1
+        recurse(n - 1, number_set)
+        number_set.add(n)
+        recurse(n - 1, number_set)
+        number_set.remove(n)
+
     recurse(num - 1, set())
     return output_list
 
-def solve_knapsack(items, capacity):
+def solve_knapsack(
+    items: list[tuple[int, int]],
+    capacity: int,
+) -> tuple[tuple[int, set[int]], int]:
     """
     Solve the Knapsack problem, 
     i.e. select the items such that the total weight does not exceed the capacity and the total value is maximized.
@@ -65,7 +79,7 @@ def solve_knapsack(items, capacity):
         raise ValueError("Input is invalid")
     
     max_total_value = -1
-    max_total_value_indices = None
+    max_total_value_indices = set()
     subsets_checked = 0
 
     for indices in number_power_set(len(items)):
@@ -82,7 +96,10 @@ def solve_knapsack(items, capacity):
 
     return (max_total_value, max_total_value_indices), subsets_checked
 
-def dynamic_solve_knapsack(items, capacity):
+def dynamic_solve_knapsack(
+    items: list[tuple[int, int]],
+    capacity: int,
+) -> tuple[tuple[int, set[int]], int]:
     """
     Solve the Knapsack problem using bottom-up dynamic programming.
     Return the maximum total value and a set of indices of selected items,
@@ -101,34 +118,50 @@ def dynamic_solve_knapsack(items, capacity):
     # construct the DP table and its first row
     # each cell contains the max total value and the corresponding index set
     # the first 0 items always have value 0
-    dp_table = [[(0, set()) for _ in range(capacity + 1)]]
+    dp_table: list[list[tuple[int, set[int]]]] = [
+        [(0, set()) for _ in range(capacity + 1)]
+    ]
     states_calculated = 0
 
     for num_of_items in range(1, len(items) + 1):
+
         dp_table.append([])
+
         for allowed_capacity in range(capacity + 1):
 
             states_calculated += 1
 
-            prev_cell_if_item_not_added = dp_table[num_of_items - 1][allowed_capacity]
-            max_total_value_if_item_not_added = prev_cell_if_item_not_added[0]
+            # if current item is excluded:
+            # best value = best value with all previous items and same capacity
+            prev_cell_if_item_excluded = dp_table[num_of_items - 1][allowed_capacity]
+            max_total_value_if_item_excluded = prev_cell_if_item_excluded[0]
 
-            current_item = items[num_of_items - 1]
-            prev_capacity = allowed_capacity - current_item[0]
-            if prev_capacity >= 0:
-                prev_cell_if_item_added = dp_table[num_of_items - 1][prev_capacity]
-                max_total_value_if_item_added = prev_cell_if_item_added[0] + current_item[1]
-            else:
-                max_total_value_if_item_added = -1
+            current_item_weight, current_item_value = items[num_of_items - 1]
 
-            # On equal values, exclude the current item. Its binary value is
-            # greater than the combined binary value of all earlier item indices.
-            if max_total_value_if_item_not_added >= max_total_value_if_item_added:
-                index_set = prev_cell_if_item_not_added[1].copy()
-                dp_table[num_of_items].append((max_total_value_if_item_not_added, index_set))
+            remaining_capacity = allowed_capacity - current_item_weight
+            if remaining_capacity >= 0:
+
+                # if current item is included:
+                # best value = best value with all previous items and remaining capacity + current item value
+                prev_cell_if_item_included = dp_table[num_of_items - 1][remaining_capacity]
+                max_total_value_if_item_included = prev_cell_if_item_included[0] + current_item_value
+
+                # on equal values, exclude the current item, because
+                # its binary value > binary sum of all earlier item indices:
+                # 2**n > 2**(n - 1) + 2**(n - 2) + ... + 1
+                if max_total_value_if_item_excluded >= max_total_value_if_item_included:
+                    index_set = prev_cell_if_item_excluded[1].copy()
+                    next_cell = (max_total_value_if_item_excluded, index_set)
+                else:
+                    index_set = prev_cell_if_item_included[1].copy()
+                    index_set.add(num_of_items - 1)
+                    next_cell = (max_total_value_if_item_included, index_set)
+
             else:
-                index_set = prev_cell_if_item_added[1].copy()
-                index_set.add(num_of_items - 1)
-                dp_table[num_of_items].append((max_total_value_if_item_added, index_set))
+                # current item does not fit, so it must be excluded
+                index_set = prev_cell_if_item_excluded[1].copy()
+                next_cell = (max_total_value_if_item_excluded, index_set)
+
+            dp_table[num_of_items].append(next_cell)
 
     return dp_table[len(items)][capacity], states_calculated

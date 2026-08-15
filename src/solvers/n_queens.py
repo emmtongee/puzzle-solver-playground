@@ -11,7 +11,7 @@ Q . . .
 """
 
 
-def n_queens_is_safe(board, row, col):
+def n_queens_is_safe(board: list[int], row: int, col: int) -> bool:
     """
     Return True if a queen can be placed at (row, col)
     without attacking any existing queens.
@@ -23,7 +23,7 @@ def n_queens_is_safe(board, row, col):
         if abs(row - prev_row) == abs(col - prev_col): return False
     return True
 
-def solve_n_queens(n):
+def solve_n_queens(n: int) -> tuple[list[list[int]], int]:
     """
     Return a list containing all solutions for a n*n board, 
     and the number of times the algorithm considers a queen placement.

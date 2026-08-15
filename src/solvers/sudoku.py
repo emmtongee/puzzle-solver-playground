@@ -18,14 +18,14 @@ A candidate check is one call to sudoku_is_safe during the search.
 """
 
 
-def read_sudoku_file(path):
+def read_sudoku_file(path: str) -> str:
     """
     Read the text file with path and return the content as a string.
     """
     with open(path) as f:
         return f.read()
 
-def parse_sudoku(board_str):
+def parse_sudoku(board_str: str) -> list[list[int]]:
     """
     Parse the string representing a board and return a 2D list.
     Raise ValueError if:
@@ -50,7 +50,12 @@ def parse_sudoku(board_str):
         
     return output_list
 
-def sudoku_is_safe(board, row, col, num):
+def sudoku_is_safe(
+    board: list[list[int]],
+    row: int,
+    col: int,
+    num: int,
+) -> bool:
     """
     Check whether a value can occupy a cell with coordinates (row, col) without conflict, 
     while ignoring only the value currently at that coordinate.
@@ -61,8 +66,8 @@ def sudoku_is_safe(board, row, col, num):
         raise ValueError("num not from 1 to 9")
 
     # row conflict
-    for i in range(9):
-        if board[row][i] == num and i != col:
+    for current_col in range(9):
+        if board[row][current_col] == num and current_col != col:
             return False
     
     # column conflict
@@ -81,7 +86,7 @@ def sudoku_is_safe(board, row, col, num):
     
     return True
 
-def sudoku_board_is_valid(board):
+def sudoku_board_is_valid(board: list[list[int]]) -> bool:
     """
     Check whether all existing non-zero cells (clues) are mutually consistent.
     """
@@ -91,7 +96,7 @@ def sudoku_board_is_valid(board):
                 return False
     return True
 
-def solve_sudoku(board):
+def solve_sudoku(board: list[list[int]]) -> tuple[list[list[int]] | None, int]:
     '''
     Validate the initial clues and raise ValueError if clues contradict each other.
     Solve and return a copy of the board, along with the candidate-check count.
@@ -125,7 +130,11 @@ def solve_sudoku(board):
 
     return backtrack(board_copy, 0, 0, 0)
 
-def sudoku_get_cell_candidates(board, row, col):
+def sudoku_get_cell_candidates(
+    board: list[list[int]],
+    row: int,
+    col: int,
+) -> tuple[list[int], int]:
     """
     For the empty cell at (row, col),
     return a list of its valid candidates in ascending order, and the candidate-check count.
@@ -141,7 +150,9 @@ def sudoku_get_cell_candidates(board, row, col):
     return valid_candidates, candidates_checked
 
 
-def sudoku_select_mrv_cell(board):
+def sudoku_select_mrv_cell(
+    board: list[list[int]],
+) -> tuple[int | None, int | None, list[int] | None, int]:
     """
     Select the empty cell with the fewest legal candidates.
     Ties are resolved in row-major order (from top to bottom, then from left to right).
@@ -178,7 +189,7 @@ def sudoku_select_mrv_cell(board):
         return None, None, None, 0
     return target_row, target_col, target_candidate_list, candidates_checked
 
-def mrv_solve_sudoku(board):
+def mrv_solve_sudoku(board: list[list[int]]) -> tuple[list[list[int]] | None, int]:
     """
     Validate the initial clues and raise ValueError if clues contradict each other.
     Solve and return a copy of the board, along with the candidate-check count.
@@ -198,6 +209,7 @@ def mrv_solve_sudoku(board):
         candidates_checked += check_count
         if row is None:
             return board, candidates_checked
+        assert candidate_list is not None
         if candidate_list == []:
             return None, candidates_checked
         for candidate in candidate_list:
