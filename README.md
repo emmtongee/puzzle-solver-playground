@@ -34,9 +34,53 @@ Given $n$ items, each with weight $w_i$ and value $v_i$, and a knapsack with cap
 
 **Bottom-up dynamic programming**: Solve smaller subproblems defined by the number of available items and the knapsack capacity. Store their optimal results in a table, then use those results to build solutions for larger subproblems until the original problem is solved.
 
-## How to use
+## Requirements
 
-To run the demonstration:
+This project requires Python 3 and has been tested with Python 3.13.7.
+The solvers use only the Python standard library and have no third-party runtime dependencies.
+`pytest` is required to run the test suite.
+
+## Setup
+
+A virtual environment is recommended.
+
+1. Create a virtual environment:
+
+```bash
+python3 -m venv .venv
+```
+
+2. Activate the virtual environment:
+
+- Windows Command Prompt
+
+```bash
+.venv\Scripts\activate.bat
+```
+
+- Windows PowerShell
+
+```bash
+.venv\Scripts\Activate.ps1
+```
+
+- macOS and Linux
+
+```bash
+source .venv/bin/activate
+```
+
+3. Install pytest (if you want to run the tests):
+
+```bash
+python3 -m pip install pytest
+```
+
+## Usage
+
+The commands listed here should be run from the repository root.
+
+To launch the interactive CLI:
 
 ```bash
 python3 -m src.main
@@ -54,32 +98,61 @@ To compare the naive and MRV Sudoku solvers:
 python3 -m benchmarks.sudoku_comparison
 ```
 
+To compare the brute-force and dynamic-programming Knapsack solvers:
+
+```bash
+python3 -m benchmarks.knapsack_comparison
+```
+
 The raw measurements and analysis are available in [benchmarks/sudoku_results.md](benchmarks/sudoku_results.md) and [benchmarks/knapsack_results.md](benchmarks/knapsack_results.md).
 
-## Current Progress
+### Sample Output
 
-### N-Queens
+The following is representative output from the Knapsack demonstration. Runtime varies by machine and between runs.
 
-- [x] Backtracking solver
-- [x] Board display
-- [x] Search-state counter
-- [x] Runtime measurement
-- [x] Tests
+```text
+1. N-Queens
+2. Sudoku
+3. Knapsack
+4. Exit
+Choose one: 3
+-----------------------------
+Items: [(3, 4), (2, 3), (1, 1)]
+Capacity: 5
+Maximum value: 7
+Selected items:
+Item 1: weight 3, value 4
+Item 2: weight 2, value 3
+States calculated: 18
+-----------------------------
+1. N-Queens
+2. Sudoku
+3. Knapsack
+4. Exit
+Choose one: 4
+```
 
-### Sudoku
+## Project Status
 
-- [x] Parsing and validation
-- [x] Naive backtracking solver
-- [x] MRV backtracking solver
-- [x] Candidate-check and runtime comparison
-- [x] Tests
+Puzzle Solver Playground currently includes:
 
-### Knapsack
+- interactive CLI demonstrations for N-Queens, Sudoku, and 0/1 Knapsack;
+- multiple algorithms for comparing approaches to Sudoku and Knapsack;
+- input parsing and validation for Sudoku;
+- board and solution display utilities;
+- search-state and runtime measurements;
+- benchmark measurements and analysis for Sudoku and Knapsack; and
+- 69 automated tests covering solver behavior, validation, parsing, and display.
 
-- [x] 0/1 Knapsack brute-force solver
-- [x] 0/1 Knapsack dynamic-programming solver
-- [x] Knapsack performance comparison
+All three solver demonstrations are accessible through `python3 -m src.main`.
 
-### Planned
+## Future Improvements
 
-- [ ] CLI benchmark command
+Possible future extensions include:
+
+- adding more puzzles and solving algorithms;
+- allowing users to enter and play selected puzzles;
+- generating puzzles;
+- adding a GUI for puzzle interaction;
+- visualizing the algorithms on a small scale;
+- exploring graph coloring or local search.
